@@ -23,7 +23,15 @@ player_surf = pygame.transform.scale_by(player_surf, 3)
 player_surf = pygame.transform.flip(player_surf, 180, 0)
 player_rect = player_surf.get_rect(midbottom = (50, background_surf.get_height()))
 
-font = pygame.font.Font('fonts/Modenine-2OPd.ttf', 50)
+walking_enemy_surf = pygame.transform.scale_by(
+    pygame.image.load("images/Tiles/Characters/main_enemy.png").convert_alpha(),
+    3)
+walking_enemy_rect = walking_enemy_surf.get_rect(bottomright = (SCREEN_WIDTH, background_surf.get_height()))
+walking_enemy_speed = 5
+
+font = pygame.font.Font("fonts/Modenine-2OPd.ttf", 40)
+score_surf = font.render("SCORE: 0", True, "Black")
+score_rect = score_surf.get_rect(center = (125, 50))
 
 while True:
     for event in pygame.event.get():
@@ -36,6 +44,11 @@ while True:
     screen.blit(background_surf, background_rect)
     screen.blit(ground_surf, ground_rect)
     screen.blit(player_surf, player_rect)
+    screen.blit(walking_enemy_surf, walking_enemy_rect)
+    walking_enemy_rect.x -= walking_enemy_speed
+    if walking_enemy_rect.right < -20:
+        walking_enemy_rect.left = SCREEN_WIDTH + 20
+    screen.blit(score_surf, score_rect)
 
     pygame.display.update()
     clock.tick(60)
