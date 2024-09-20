@@ -21,7 +21,8 @@ ground_rect = ground_surf.get_rect(topleft = (0, 500))
 player_surf = pygame.image.load("images/Tiles/Characters/main_character.png").convert_alpha()
 player_surf = pygame.transform.scale_by(player_surf, 3)
 player_surf = pygame.transform.flip(player_surf, 180, 0)
-player_rect = player_surf.get_rect(midbottom = (50, background_surf.get_height()))
+player_rect = player_surf.get_rect(midbottom = (75, background_surf.get_height()))
+player_gravity = 0
 
 walking_enemy_surf = pygame.transform.scale_by(
     pygame.image.load("images/Tiles/Characters/main_enemy.png").convert_alpha(),
@@ -38,16 +39,27 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and player_rect.bottom == background_surf.get_height():
+                player_gravity -= 15
 
     screen.fill((0, 0, 0))
 
     screen.blit(background_surf, background_rect)
     screen.blit(ground_surf, ground_rect)
+
+    player_gravity += 0.5
+    player_rect.y += player_gravity
+    if player_rect.bottom >= background_surf.get_height():
+        player_rect.bottom = background_surf.get_height()
+        player_gravity = 0
     screen.blit(player_surf, player_rect)
-    screen.blit(walking_enemy_surf, walking_enemy_rect)
+
     walking_enemy_rect.x -= walking_enemy_speed
     if walking_enemy_rect.right < -20:
         walking_enemy_rect.left = SCREEN_WIDTH + 20
+    screen.blit(walking_enemy_surf, walking_enemy_rect)
+    
     screen.blit(score_surf, score_rect)
 
     pygame.display.update()
