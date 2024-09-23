@@ -1,5 +1,6 @@
 import pygame
 from sys import exit
+from random import randint
 
 pygame.init()
 
@@ -29,6 +30,11 @@ def draw_game_over_menu():
     screen.blit(game_over_surf, game_over_rect)
     screen.blit(restart_game_surf, restart_game_rect)
     screen.blit(quit_game_surf, quit_game_rect)
+
+def draw_characters():
+    screen.blit(player_surf, player_rect)
+    screen.blit(walking_enemy_surf, walking_enemy_rect)
+    screen.blit(flying_enemy_surf, flying_enemy_rect)
 # ----------------------------------------------------------------------------------------------------------------------
 
 SCREEN_WIDTH = 800
@@ -47,6 +53,7 @@ ground_surf = pygame.transform.scale(
     (800, 100))
 ground_rect = ground_surf.get_rect(topleft = (0, 500))
 
+# Player and enemy surfs/rects------------------------------------------------------------------------------------------
 player_surf = pygame.image.load("images/Tiles/Characters/main_character.png").convert_alpha()
 player_surf = pygame.transform.scale_by(player_surf, 3)
 player_surf = pygame.transform.flip(player_surf, 180, 0)
@@ -54,12 +61,18 @@ player_rect = player_surf.get_rect(midbottom = (75, background_surf.get_height()
 player_gravity = 0
 
 walking_enemy_surf = pygame.transform.scale_by(
-    pygame.image.load("images/Tiles/Characters/main_enemy.png").convert_alpha(),
-    3)
+    pygame.image.load("images/Tiles/Characters/main_enemy.png").convert_alpha(), 3)
 walking_enemy_rect = walking_enemy_surf.get_rect(bottomright = (SCREEN_WIDTH, background_surf.get_height()))
 walking_enemy_speed = 5
 
-# All fonts and text surfaces and rects-------------------------------------------------------------------------------------
+flying_enemy_surf = pygame.transform.scale_by(
+    pygame.image.load("images/Tiles/Characters/second_enemy.png").convert_alpha(), 3)
+flying_enemy_rect = flying_enemy_surf.get_rect(bottomright = (SCREEN_WIDTH, 300))
+flying_enemy_speed = 3
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+# All fonts and text surfs/rects----------------------------------------------------------------------------------------
 main_font = pygame.font.Font("fonts/Modenine-2OPd.ttf", 40)
 second_font = pygame.font.Font("fonts/Modenine-2OPd.ttf", 20)
 
@@ -125,6 +138,7 @@ while True:
         elif in_game_over_menu:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 walking_enemy_rect.left = SCREEN_WIDTH + 20
+                flying_enemy_rect.left = SCREEN_WIDTH + 50
                 game_playing = True
                 score_start_time = pygame.time.get_ticks() // 125
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
@@ -142,16 +156,22 @@ while True:
         if player_rect.bottom >= background_surf.get_height():
             player_rect.bottom = background_surf.get_height()
             player_gravity = 0
-        screen.blit(player_surf, player_rect)
 
         walking_enemy_rect.x -= walking_enemy_speed
         if walking_enemy_rect.right < -20:
-            walking_enemy_rect.left = SCREEN_WIDTH + 20
-        screen.blit(walking_enemy_surf, walking_enemy_rect)
+            walking_enemy_rect.left = SCREEN_WIDTH + randint(1, 50)
 
+        flying_enemy_rect.x -= flying_enemy_speed
+        if flying_enemy_rect.right < - 30:
+            flying_enemy_rect.left = SCREEN_WIDTH + randint(75, 100)
+        
+        draw_characters()
         update_score()
 
         if player_rect.colliderect(walking_enemy_rect):
+            game_playing = False
+            in_game_over_menu = True
+        if player_rect.colliderect(flying_enemy_rect):
             game_playing = False
             in_game_over_menu = True
     elif in_pause_menu:
