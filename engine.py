@@ -139,22 +139,25 @@ class Engine:
             if walking_enemy_obj.walking_enemy_rect.right < -20:
                 walking_enemy_obj.walking_enemy_rect.left = display_obj.SCREEN_WIDTH + randint(1, 75)
 
-        flying_enemy_obj.flying_enemy_rect.x -= flying_enemy_obj.flying_enemy_speed
-        if flying_enemy_obj.flying_enemy_rect.right < - 20:
-            flying_enemy_obj.flying_enemy_rect.left = display_obj.SCREEN_WIDTH + randint(100, 175)
+            flying_enemy_obj.flying_enemy_rect.x -= flying_enemy_obj.flying_enemy_speed
+            if flying_enemy_obj.flying_enemy_rect.right < - 20:
+                flying_enemy_obj.flying_enemy_rect.left = display_obj.SCREEN_WIDTH + randint(50, 125)
         
-        self.draw_characters()
-        self.update_score()
+            self.draw_characters()
+            self.update_score()
 
-        if player_obj.player_rect.colliderect(walking_enemy_obj.walking_enemy_rect):
-            self.game_playing = False
-            self.in_game_over_menu = True
-        if player_obj.player_rect.colliderect(flying_enemy_obj.flying_enemy_rect):
-            self.game_playing = False
-            self.in_game_over_menu = True
+            if player_obj.player_rect.colliderect(walking_enemy_obj.walking_enemy_rect):
+                self.game_playing = False
+                self.in_game_over_menu = True
+            if player_obj.player_rect.colliderect(flying_enemy_obj.flying_enemy_rect):
+                self.game_playing = False
+                self.in_game_over_menu = True
         elif self.in_pause_menu:
             self.draw_background()
             self.draw_pause_menu()
         elif self.in_game_over_menu:
             self.draw_background()
             self.draw_game_over_menu()
+
+        display.pygame.display.update()
+        display_obj.clock.tick(60)
