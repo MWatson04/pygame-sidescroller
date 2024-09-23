@@ -3,6 +3,12 @@ from sys import exit
 
 pygame.init()
 
+def update_score():
+    current_score = (pygame.time.get_ticks() // 125) - score_start_time
+    score_surf = font.render(f"SCORE: {current_score}", True, "Black")
+    score_rect = score_surf.get_rect(center = (125, 50))
+    screen.blit(score_surf, score_rect)
+
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -31,11 +37,10 @@ walking_enemy_rect = walking_enemy_surf.get_rect(bottomright = (SCREEN_WIDTH, ba
 walking_enemy_speed = 5
 
 font = pygame.font.Font("fonts/Modenine-2OPd.ttf", 40)
-score_surf = font.render("SCORE: 0", True, "Black")
-score_rect = score_surf.get_rect(center = (125, 50))
 start_game_surf = font.render("Press 'Space' to Start", True, "Black")
 start_game_rect = start_game_surf.get_rect(center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
 
+score_start_time = 0
 in_start_menu = True
 game_playing = False
 in_game_over_menu = False
@@ -59,6 +64,7 @@ while True:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 walking_enemy_rect.left = SCREEN_WIDTH + 20
                 game_playing = True
+                score_start_time = pygame.time.get_ticks() // 125
 
     if in_start_menu:
         screen.fill((0, 0, 0))
@@ -85,7 +91,7 @@ while True:
             walking_enemy_rect.left = SCREEN_WIDTH + 20
         screen.blit(walking_enemy_surf, walking_enemy_rect)
         
-        screen.blit(score_surf, score_rect)
+        update_score()
 
         if player_rect.colliderect(walking_enemy_rect):
             game_playing = False
