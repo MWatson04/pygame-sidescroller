@@ -67,8 +67,8 @@ walking_enemy_speed = 5
 
 flying_enemy_surf = pygame.transform.scale_by(
     pygame.image.load("images/Tiles/Characters/second_enemy.png").convert_alpha(), 3)
-flying_enemy_rect = flying_enemy_surf.get_rect(bottomright = (SCREEN_WIDTH, 300))
-flying_enemy_speed = 3
+flying_enemy_rect = flying_enemy_surf.get_rect(bottomright = (SCREEN_WIDTH + 500, 300))
+flying_enemy_speed = 4
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -153,7 +153,7 @@ while True:
     if in_start_menu:
         draw_background()
         draw_start_menu()
-    if game_playing:
+    elif game_playing:
         draw_background()
 
         player_gravity += 0.5
@@ -164,11 +164,11 @@ while True:
 
         walking_enemy_rect.x -= walking_enemy_speed
         if walking_enemy_rect.right < -20:
-            walking_enemy_rect.left = SCREEN_WIDTH + randint(1, 50)
+            walking_enemy_rect.left = SCREEN_WIDTH + randint(1, 75)
 
         flying_enemy_rect.x -= flying_enemy_speed
-        if flying_enemy_rect.right < - 30:
-            flying_enemy_rect.left = SCREEN_WIDTH + randint(75, 100)
+        if flying_enemy_rect.right < - 20:
+            flying_enemy_rect.left = SCREEN_WIDTH + randint(100, 175)
         
         draw_characters()
         update_score()
