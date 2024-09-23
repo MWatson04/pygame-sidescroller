@@ -93,32 +93,32 @@ class Engine:
         current_score = (display.pygame.time.get_ticks() // 125) - self.score_reset - self.pause_duration
         score_surf = self.main_font.render(f"SCORE: {current_score}", True, "Black")
         score_rect = score_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 50))
-        display_obj.screen.blit(score_surf, score_rect)
+        display.screen.blit(score_surf, score_rect)
 
     def draw_background(self):
-        display_obj.screen.blit(display_obj.background_surf, display_obj.background_rect)
-        display_obj.screen.blit(display_obj.ground_surf, display_obj.ground_rect)
+        display.screen.blit(display_obj.background_surf, display_obj.background_rect)
+        display.screen.blit(display_obj.ground_surf, display_obj.ground_rect)
 
     def draw_start_menu(self):
-        display_obj.screen.blit(self.game_title_surf, self.game_title_rect)
-        display_obj.screen.blit(self.start_game_surf, self.start_game_rect)
-        display_obj.screen.blit(self.quit_game_surf, self.quit_game_rect)
-        display_obj.screen.blit(self.instructions_surf, self.instructions_rect)
+        display.screen.blit(self.game_title_surf, self.game_title_rect)
+        display.screen.blit(self.start_game_surf, self.start_game_rect)
+        display.screen.blit(self.quit_game_surf, self.quit_game_rect)
+        display.screen.blit(self.instructions_surf, self.instructions_rect)
 
     def draw_pause_menu(self):
-        display_obj.screen.blit(self.pause_menu_surf, self.pause_menu_rect)
-        display_obj.screen.blit(self.resume_game_surf, self.resume_game_rect)
-        display_obj.screen.blit(self.quit_game_surf, self.quit_game_rect)
+        display.screen.blit(self.pause_menu_surf, self.pause_menu_rect)
+        display.screen.blit(self.resume_game_surf, self.resume_game_rect)
+        display.screen.blit(self.quit_game_surf, self.quit_game_rect)
 
     def draw_game_over_menu(self):
-        display_obj.screen.blit(self.game_over_surf, self.game_over_rect)
-        display_obj.screen.blit(self.restart_game_surf, self.restart_game_rect)
-        display_obj.screen.blit(self.quit_game_surf, self.quit_game_rect)
+        display.screen.blit(self.game_over_surf, self.game_over_rect)
+        display.screen.blit(self.restart_game_surf, self.restart_game_rect)
+        display.screen.blit(self.quit_game_surf, self.quit_game_rect)
 
     def draw_characters(self):
-        display_obj.screen.blit(player_obj.player_surf, player_obj.player_rect)
-        display_obj.screen.blit(walking_enemy_obj.walking_enemy_surf, walking_enemy_obj.walking_enemy_rect)
-        display_obj.screen.blit(flying_enemy_obj.flying_enemy_surf, flying_enemy_obj.flying_enemy_rect)
+        display.screen.blit(player_obj.player_surf, player_obj.player_rect)
+        display.screen.blit(walking_enemy_obj.walking_enemy_surf, walking_enemy_obj.walking_enemy_rect)
+        display.screen.blit(flying_enemy_obj.flying_enemy_surf, flying_enemy_obj.flying_enemy_rect)
 
     def run_game(self):
         self.event_catcher()
@@ -140,8 +140,8 @@ class Engine:
                 walking_enemy_obj.walking_enemy_rect.left = display_obj.SCREEN_WIDTH + randint(1, 75)
 
             flying_enemy_obj.flying_enemy_rect.x -= flying_enemy_obj.flying_enemy_speed
-            if flying_enemy_obj.flying_enemy_rect.right < - 20:
-                flying_enemy_obj.flying_enemy_rect.left = display_obj.SCREEN_WIDTH + randint(50, 125)
+            if flying_enemy_obj.flying_enemy_rect.right < - 50:
+                flying_enemy_obj.flying_enemy_rect.left = display_obj.SCREEN_WIDTH + randint(100, 150)
         
             self.draw_characters()
             self.update_score()

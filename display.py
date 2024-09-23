@@ -1,10 +1,13 @@
 import pygame
 
+G_SCREEN_WIDTH = 800
+G_SCREEN_HEIGHT = 600
+screen = pygame.display.set_mode((G_SCREEN_WIDTH, G_SCREEN_HEIGHT))
+
 class Display:
     def __init__(self):
         self.SCREEN_WIDTH = 800
         self.SCREEN_HEIGHT = 600
-        self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
 
         self.background_surf = pygame.transform.scale(
