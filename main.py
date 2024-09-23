@@ -3,11 +3,33 @@ from sys import exit
 
 pygame.init()
 
+# Functions-------------------------------------------------------------------------------------------------------------
+def draw_background():
+    screen.blit(background_surf, background_rect)
+    screen.blit(ground_surf, ground_rect)
+
 def update_score():
     current_score = (pygame.time.get_ticks() // 125) - score_start_time
     score_surf = main_font.render(f"SCORE: {current_score}", True, "Black")
     score_rect = score_surf.get_rect(center = (125, 50))
     screen.blit(score_surf, score_rect)
+
+def draw_start_menu():
+    screen.blit(game_title_surf, game_title_rect)
+    screen.blit(start_game_surf, start_game_rect)
+    screen.blit(quit_game_surf, quit_game_rect)
+    screen.blit(instructions_surf, instructions_rect)
+
+def draw_pause_menu():
+    screen.blit(pause_menu_surf, pause_menu_rect)
+    screen.blit(resume_game_surf, resume_game_rect)
+    screen.blit(quit_game_surf, quit_game_rect)
+
+def draw_game_over_menu():
+    screen.blit(game_over_surf, game_over_rect)
+    screen.blit(restart_game_surf, restart_game_rect)
+    screen.blit(quit_game_surf, quit_game_rect)
+# ----------------------------------------------------------------------------------------------------------------------
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -37,6 +59,7 @@ walking_enemy_surf = pygame.transform.scale_by(
 walking_enemy_rect = walking_enemy_surf.get_rect(bottomright = (SCREEN_WIDTH, background_surf.get_height()))
 walking_enemy_speed = 5
 
+# All fonts and text surfaces and rects-------------------------------------------------------------------------------------
 main_font = pygame.font.Font("fonts/Modenine-2OPd.ttf", 40)
 second_font = pygame.font.Font("fonts/Modenine-2OPd.ttf", 20)
 
@@ -63,6 +86,7 @@ pause_menu_rect = pause_menu_surf.get_rect(center = (SCREEN_WIDTH / 2, 250))
 
 resume_game_surf = second_font.render("Press 'Space' to Resume", True, "Black")
 resume_game_rect = resume_game_surf.get_rect(center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+# ----------------------------------------------------------------------------------------------------------------------
 
 score_start_time = 0
 in_start_menu = True
@@ -84,7 +108,7 @@ while True:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 pygame.quit()
                 exit()
-        elif game_playing:
+        if game_playing:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and player_rect.bottom == background_surf.get_height():
                     player_gravity -= 15
@@ -108,20 +132,10 @@ while True:
                 exit()
 
     if in_start_menu:
-        screen.fill((0, 0, 0))
-
-        screen.blit(background_surf, background_rect)
-        screen.blit(ground_surf, ground_rect)
-        screen.blit(game_title_surf, game_title_rect)
-        screen.blit(start_game_surf, start_game_rect)
-        screen.blit(quit_game_surf, quit_game_rect)
-        screen.blit(instructions_surf, instructions_rect)
-
+        draw_background()
+        draw_start_menu()
     if game_playing:
-        screen.fill((0, 0, 0))
-
-        screen.blit(background_surf, background_rect)
-        screen.blit(ground_surf, ground_rect)
+        draw_background()
 
         player_gravity += 0.5
         player_rect.y += player_gravity
@@ -134,28 +148,18 @@ while True:
         if walking_enemy_rect.right < -20:
             walking_enemy_rect.left = SCREEN_WIDTH + 20
         screen.blit(walking_enemy_surf, walking_enemy_rect)
-        
+
         update_score()
 
         if player_rect.colliderect(walking_enemy_rect):
             game_playing = False
             in_game_over_menu = True
     elif in_pause_menu:
-        screen.fill((0, 0, 0))
-
-        screen.blit(background_surf, background_rect)
-        screen.blit(ground_surf, ground_rect)
-        screen.blit(pause_menu_surf, pause_menu_rect)
-        screen.blit(resume_game_surf, resume_game_rect)
-        screen.blit(quit_game_surf, quit_game_rect)
+        draw_background()
+        draw_pause_menu()
     elif in_game_over_menu:
-        screen.fill((0, 0, 0))
-
-        screen.blit(background_surf, background_rect)
-        screen.blit(ground_surf, ground_rect)
-        screen.blit(game_over_surf, game_over_rect)
-        screen.blit(restart_game_surf, restart_game_rect)
-        screen.blit(quit_game_surf, quit_game_rect)
+        draw_background()
+        draw_game_over_menu()
 
     pygame.display.update()
     clock.tick(60)
