@@ -20,20 +20,32 @@ class Engine:
         self.in_game_over_menu = False
         self.current_score = 0
 
+        # Music
+        # self.start_menu_music = display.pygame.mixer.Sound("sounds/arcade-party-173553.mp3")
+        # self.start_menu_music.set_volume(0.5)
+        self.game_playing_music = display.pygame.mixer.Sound("sounds/music-for-arcade-style-game-146875.mp3")
+        self.game_playing_music.set_volume(0.5)
+        self.game_playing_music.play(loops = -1)
+
+        # All Fonts/Text Surfs/Rects------------------------------------------------------------------------------------
         self.main_font = display.pygame.font.Font("fonts/Modenine-2OPd.ttf", 40)
         self.second_font = display.pygame.font.Font("fonts/Modenine-2OPd.ttf", 20)
 
         self.start_game_surf = self.second_font.render("Press 'Space' to Start", True, "Black")
-        self.start_game_rect = self.start_game_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, display_obj.SCREEN_HEIGHT / 2))
+        self.start_game_rect = self.start_game_surf.get_rect(
+            center = (display_obj.SCREEN_WIDTH / 2, display_obj.SCREEN_HEIGHT / 2))
 
-        self.instructions_surf = self.second_font.render("You can press 'Esc' at any time to pause the game", True, "Black")
-        self.instructions_rect = self.instructions_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 380))
+        self.instructions_surf = self.second_font.render(
+            "You can press 'Esc' at any time to pause the game", True, "Black")
+        self.instructions_rect = self.instructions_surf.get_rect(
+            center = (display_obj.SCREEN_WIDTH / 2, 380))
 
         self.game_title_surf = self.main_font.render("PIXEL SCROLLER", True, "Black")
         self.game_title_rect = self.game_title_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 250))
 
         self.restart_game_surf = self.second_font.render("Press 'Space' to Play Again", True, "Black")
-        self.restart_game_rect = self.start_game_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2 - 25, display_obj.SCREEN_HEIGHT / 2))
+        self.restart_game_rect = self.start_game_surf.get_rect(
+            center = (display_obj.SCREEN_WIDTH / 2 - 25, display_obj.SCREEN_HEIGHT / 2))
 
         self.quit_game_surf = self.second_font.render("Press 'Q' to Exit", True, "Black")
         self.quit_game_rect = self.quit_game_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 340))
@@ -45,19 +57,23 @@ class Engine:
         self.pause_menu_rect = self.pause_menu_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 250))
 
         self.resume_game_surf = self.second_font.render("Press 'Space' to Resume", True, "Black")
-        self.resume_game_rect = self.resume_game_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, display_obj.SCREEN_HEIGHT / 2))
+        self.resume_game_rect = self.resume_game_surf.get_rect(
+            center = (display_obj.SCREEN_WIDTH / 2, display_obj.SCREEN_HEIGHT / 2))
 
-    # Poll for all events
+    # Check for all events
     def event_catcher(self):
         for event in display.pygame.event.get():
+            # General check to close game regardless of the state
             if event.type == display.pygame.QUIT:
                 display.pygame.quit()
                 exit()
-
+            
+            # Check to close game/make small changes depending on current game state
             if self.in_start_menu:
                 if event.type == display.pygame.KEYDOWN and event.key == display.pygame.K_SPACE:
                     self.in_start_menu = False
                     self.game_playing = True
+                    display.pygame.mixer.Sound.stop(self.start_menu_music)
                     self.score_reset = display.pygame.time.get_ticks() // 125
                 if event.type == display.pygame.KEYDOWN and event.key == display.pygame.K_q:
                     display.pygame.quit()
@@ -80,8 +96,8 @@ class Engine:
                     exit()
             elif self.in_game_over_menu:
                 if event.type == display.pygame.KEYDOWN and event.key == display.pygame.K_SPACE:
-                    walking_enemy_obj.walking_enemy_rect.left = display_obj.SCREEN_WIDTH + 20
-                    flying_enemy_obj.flying_enemy_rect.left = display_obj.SCREEN_WIDTH + 50
+                    walking_enemy_obj.walking_enemy_rect.left = display_obj.SCREEN_WIDTH
+                    flying_enemy_obj.flying_enemy_rect.left = display_obj.SCREEN_WIDTH + 300
                     self.game_playing = True
                     self.score_reset = display.pygame.time.get_ticks() // 125
                     self.pause_duration = 0
@@ -89,6 +105,7 @@ class Engine:
                     display.pygame.quit()
                     exit()
 
+    # Functions to draw everything
     def update_score(self):
         current_score = (display.pygame.time.get_ticks() // 125) - self.score_reset - self.pause_duration
         score_surf = self.main_font.render(f"SCORE: {current_score}", True, "Black")
@@ -123,6 +140,7 @@ class Engine:
     def run_game(self):
         self.event_catcher()
 
+        # Each if/elif statement represents what happens in each state of the game
         if self.in_start_menu:
             self.draw_background()
             self.draw_start_menu()

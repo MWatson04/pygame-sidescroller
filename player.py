@@ -2,6 +2,7 @@ import display
 
 display_obj = display.Display()
 
+# Set initial player data
 class Player:
     def __init__(self):
         self.player_surf = display.pygame.image.load("images/Tiles/Characters/main_character.png").convert_alpha()

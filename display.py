@@ -4,6 +4,7 @@ G_SCREEN_WIDTH = 800
 G_SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((G_SCREEN_WIDTH, G_SCREEN_HEIGHT))
 
+# Stores general display information
 class Display:
     def __init__(self):
         self.SCREEN_WIDTH = 800
