@@ -5,15 +5,15 @@ from random import randint
 pygame.init()
 
 # Functions-------------------------------------------------------------------------------------------------------------
+def update_score():
+    current_score = (pygame.time.get_ticks() // 125) - score_reset - pause_duration
+    score_surf = main_font.render(f"SCORE: {current_score}", True, "Black")
+    score_rect = score_surf.get_rect(center = (SCREEN_WIDTH / 2, 50))
+    screen.blit(score_surf, score_rect)
+
 def draw_background():
     screen.blit(background_surf, background_rect)
     screen.blit(ground_surf, ground_rect)
-
-def update_score():
-    current_score = (pygame.time.get_ticks() // 125) - score_start_time
-    score_surf = main_font.render(f"SCORE: {current_score}", True, "Black")
-    score_rect = score_surf.get_rect(center = (125, 50))
-    screen.blit(score_surf, score_rect)
 
 def draw_start_menu():
     screen.blit(game_title_surf, game_title_rect)
@@ -101,7 +101,9 @@ resume_game_surf = second_font.render("Press 'Space' to Resume", True, "Black")
 resume_game_rect = resume_game_surf.get_rect(center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
 # ----------------------------------------------------------------------------------------------------------------------
 
-score_start_time = 0
+score_reset = 0
+pause_start = 0
+pause_duration = 0
 in_start_menu = True
 game_playing = False
 in_pause_menu = False
@@ -117,21 +119,23 @@ while True:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 in_start_menu = False
                 game_playing = True
-                score_start_time = pygame.time.get_ticks() // 125
+                score_reset = pygame.time.get_ticks() // 125
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 pygame.quit()
                 exit()
-        if game_playing:
+        elif game_playing:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and player_rect.bottom == background_surf.get_height():
                     player_gravity -= 15
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 game_playing = False
                 in_pause_menu = True
+                pause_start = pygame.time.get_ticks() // 125
         elif in_pause_menu:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 in_pause_menu = False
                 game_playing = True
+                pause_duration += (pygame.time.get_ticks() // 125) - pause_start
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 pygame.quit()
                 exit()
@@ -140,7 +144,8 @@ while True:
                 walking_enemy_rect.left = SCREEN_WIDTH + 20
                 flying_enemy_rect.left = SCREEN_WIDTH + 50
                 game_playing = True
-                score_start_time = pygame.time.get_ticks() // 125
+                score_reset = pygame.time.get_ticks() // 125
+                pause_duration = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 pygame.quit()
                 exit()
