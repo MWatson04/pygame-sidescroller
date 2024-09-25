@@ -1,6 +1,7 @@
 import display
 import player
 import enemy
+import score
 from sys import exit
 from random import randint
 
@@ -19,6 +20,7 @@ class Engine:
         self.in_pause_menu = False
         self.in_game_over_menu = False
         self.current_score = 0
+        self.current_high_score = score.get_high_score("highscore.json")
 
         # Music
         # self.start_menu_music = display.pygame.mixer.Sound("sounds/arcade-party-173553.mp3")
@@ -65,7 +67,7 @@ class Engine:
         self.resume_game_rect = self.resume_game_surf.get_rect(
             center = (display_obj.SCREEN_WIDTH / 2, display_obj.SCREEN_HEIGHT / 2))
         
-        self.high_score_surf = self.second_font.render("HIGH SCORE: 0", True, "Black")
+        self.high_score_surf = self.second_font.render(f"HIGH SCORE: {self.current_high_score}", True, "Black")
         self.high_score_rect = self.high_score_surf.get_rect(topleft = (25, 25))
 
     # Check for all events
@@ -175,9 +177,11 @@ class Engine:
             self.update_score()
 
             if player_obj.player_rect.colliderect(walking_enemy_obj.walking_enemy_rect):
+                score.store_high_score(self.current_score, "highscore.json")
                 self.game_playing = False
                 self.in_game_over_menu = True
             if player_obj.player_rect.colliderect(flying_enemy_obj.flying_enemy_rect):
+                score.store_high_score(self.current_score, "highscore.json")
                 self.game_playing = False
                 self.in_game_over_menu = True
         elif self.in_pause_menu:
