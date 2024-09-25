@@ -28,17 +28,22 @@ class Engine:
         self.game_playing_music.play(loops = -1)
 
         # All Fonts/Text Surfs/Rects------------------------------------------------------------------------------------
-        self.main_font = display.pygame.font.Font("fonts/Modenine-2OPd.ttf", 40)
-        self.second_font = display.pygame.font.Font("fonts/Modenine-2OPd.ttf", 20)
+        self.main_font = display.pygame.font.Font("fonts/Modenine-2OPd.ttf", 50)
+        self.second_font = display.pygame.font.Font("fonts/Modenine-2OPd.ttf", 23)
 
         self.start_game_surf = self.second_font.render("Press 'Space' to Start", True, "Black")
         self.start_game_rect = self.start_game_surf.get_rect(
             center = (display_obj.SCREEN_WIDTH / 2, display_obj.SCREEN_HEIGHT / 2))
 
-        self.instructions_surf = self.second_font.render(
+        self.pause_instructions_surf = self.second_font.render(
             "You can press 'Esc' at any time to pause the game", True, "Black")
-        self.instructions_rect = self.instructions_surf.get_rect(
+        self.pause_instructions_rect = self.pause_instructions_surf.get_rect(
             center = (display_obj.SCREEN_WIDTH / 2, 380))
+        
+        self.controls_instructions_surf = self.second_font.render(
+            "Controls: Press the spacebar during the game to Jump", True, "Black")
+        self.controls_instructions_rect = self.controls_instructions_surf.get_rect(
+            center = (display_obj.SCREEN_WIDTH / 2, 415))
 
         self.game_title_surf = self.main_font.render("PIXEL SCROLLER", True, "Black")
         self.game_title_rect = self.game_title_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 250))
@@ -51,7 +56,7 @@ class Engine:
         self.quit_game_rect = self.quit_game_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 340))
 
         self.game_over_surf = self.main_font.render("GAME OVER", True, "Black")
-        self.game_over_rect = self.game_title_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2 + 60, 250))
+        self.game_over_rect = self.game_title_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2 + 80, 250))
 
         self.pause_menu_surf = self.main_font.render("PAUSE", True, "Black")
         self.pause_menu_rect = self.pause_menu_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 250))
@@ -59,6 +64,9 @@ class Engine:
         self.resume_game_surf = self.second_font.render("Press 'Space' to Resume", True, "Black")
         self.resume_game_rect = self.resume_game_surf.get_rect(
             center = (display_obj.SCREEN_WIDTH / 2, display_obj.SCREEN_HEIGHT / 2))
+        
+        self.high_score_surf = self.second_font.render("HIGH SCORE: 0", True, "Black")
+        self.high_score_rect = self.high_score_surf.get_rect(topleft = (25, 25))
 
     # Check for all events
     def event_catcher(self):
@@ -73,7 +81,6 @@ class Engine:
                 if event.type == display.pygame.KEYDOWN and event.key == display.pygame.K_SPACE:
                     self.in_start_menu = False
                     self.game_playing = True
-                    display.pygame.mixer.Sound.stop(self.start_menu_music)
                     self.score_reset = display.pygame.time.get_ticks() // 125
                 if event.type == display.pygame.KEYDOWN and event.key == display.pygame.K_q:
                     display.pygame.quit()
@@ -120,7 +127,9 @@ class Engine:
         display.screen.blit(self.game_title_surf, self.game_title_rect)
         display.screen.blit(self.start_game_surf, self.start_game_rect)
         display.screen.blit(self.quit_game_surf, self.quit_game_rect)
-        display.screen.blit(self.instructions_surf, self.instructions_rect)
+        display.screen.blit(self.pause_instructions_surf, self.pause_instructions_rect)
+        display.screen.blit(self.controls_instructions_surf, self.controls_instructions_rect)
+        display.screen.blit(self.high_score_surf, self.high_score_rect)
 
     def draw_pause_menu(self):
         display.screen.blit(self.pause_menu_surf, self.pause_menu_rect)
@@ -131,6 +140,7 @@ class Engine:
         display.screen.blit(self.game_over_surf, self.game_over_rect)
         display.screen.blit(self.restart_game_surf, self.restart_game_rect)
         display.screen.blit(self.quit_game_surf, self.quit_game_rect)
+        display.screen.blit(self.high_score_surf, self.high_score_rect)
 
     def draw_characters(self):
         display.screen.blit(player_obj.player_surf, player_obj.player_rect)
