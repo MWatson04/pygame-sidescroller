@@ -19,7 +19,6 @@ class Engine:
         self.game_playing = False
         self.in_pause_menu = False
         self.in_game_over_menu = False
-        self.current_score = 0
         self.current_high_score = score.get_high_score()
 
         # Music
