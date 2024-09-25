@@ -20,7 +20,7 @@ class Engine:
         self.in_pause_menu = False
         self.in_game_over_menu = False
         self.current_score = 0
-        self.current_high_score = score.get_high_score("highscore.json")
+        self.current_high_score = score.get_high_score()
 
         # Music
         # self.start_menu_music = display.pygame.mixer.Sound("sounds/arcade-party-173553.mp3")
@@ -120,6 +120,11 @@ class Engine:
         score_surf = self.main_font.render(f"SCORE: {current_score}", True, "Black")
         score_rect = score_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 50))
         display.screen.blit(score_surf, score_rect)
+        score.store_high_score(current_score)
+    
+    def update_high_score(self):
+        new_high_score = score.get_high_score()
+        self.high_score_surf = self.second_font.render(f"HIGH SCORE: {new_high_score}", True, "Black")
 
     def draw_background(self):
         display.screen.blit(display_obj.background_surf, display_obj.background_rect)
@@ -177,11 +182,11 @@ class Engine:
             self.update_score()
 
             if player_obj.player_rect.colliderect(walking_enemy_obj.walking_enemy_rect):
-                score.store_high_score(self.current_score, "highscore.json")
+                self.update_high_score()
                 self.game_playing = False
                 self.in_game_over_menu = True
             if player_obj.player_rect.colliderect(flying_enemy_obj.flying_enemy_rect):
-                score.store_high_score(self.current_score, "highscore.json")
+                self.update_high_score()
                 self.game_playing = False
                 self.in_game_over_menu = True
         elif self.in_pause_menu:
