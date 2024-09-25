@@ -3,6 +3,7 @@ import pygame
 G_SCREEN_WIDTH = 800
 G_SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((G_SCREEN_WIDTH, G_SCREEN_HEIGHT))
+pygame.display.set_caption("Pixel Scroller")
 
 # Stores general display information
 class Display:
