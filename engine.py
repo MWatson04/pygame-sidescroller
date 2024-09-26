@@ -180,11 +180,22 @@ class Engine:
             self.draw_characters()
             self.update_score()
 
-            if player_obj.player_rect.colliderect(walking_enemy_obj.walking_enemy_rect):
+            '''
+            Used for constant calculation of mask offset
+            Determines distance between player and enemy top left rect points
+            Collision happens when offset.x is less than the combined width of the two images
+            or when offset.y is less than the combined height of the two images
+            '''
+            plyr_walkenemy_offset = (walking_enemy_obj.walking_enemy_rect.x - player_obj.player_rect.x, 
+                walking_enemy_obj.walking_enemy_rect.y - player_obj.player_rect.y)
+            plyr_flyenemy_offset = (flying_enemy_obj.flying_enemy_rect.x - player_obj.player_rect.x, 
+                flying_enemy_obj.flying_enemy_rect.y - player_obj.player_rect.y)
+            
+            if player_obj.player_mask.overlap(walking_enemy_obj.walking_enemy_mask, plyr_walkenemy_offset):
                 self.update_high_score()
                 self.game_playing = False
                 self.in_game_over_menu = True
-            if player_obj.player_rect.colliderect(flying_enemy_obj.flying_enemy_rect):
+            if player_obj.player_mask.overlap(flying_enemy_obj.flying_enemy_mask, plyr_flyenemy_offset):
                 self.update_high_score()
                 self.game_playing = False
                 self.in_game_over_menu = True
