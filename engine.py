@@ -5,7 +5,6 @@ import score
 from sys import exit
 from random import randint
 
-display_obj = display.Display()
 player_obj = player.Player()
 walking_enemy_obj = enemy.WalkingEnemy()
 flying_enemy_obj = enemy.FlyingEnemy()
@@ -34,37 +33,37 @@ class Engine:
 
         self.start_game_surf = self.second_font.render("Press 'Space' to Start", True, "Black")
         self.start_game_rect = self.start_game_surf.get_rect(
-            center = (display_obj.SCREEN_WIDTH / 2, display_obj.SCREEN_HEIGHT / 2))
+            center = (display.SCREEN_WIDTH / 2, display.SCREEN_HEIGHT / 2))
 
         self.pause_instructions_surf = self.second_font.render(
             "You can press 'Esc' at any time to pause the game", True, "Black")
         self.pause_instructions_rect = self.pause_instructions_surf.get_rect(
-            center = (display_obj.SCREEN_WIDTH / 2, 380))
+            center = (display.SCREEN_WIDTH / 2, 380))
         
         self.controls_instructions_surf = self.second_font.render(
             "Controls: Press the spacebar during the game to Jump", True, "Black")
         self.controls_instructions_rect = self.controls_instructions_surf.get_rect(
-            center = (display_obj.SCREEN_WIDTH / 2, 415))
+            center = (display.SCREEN_WIDTH / 2, 415))
 
         self.game_title_surf = self.main_font.render("PIXEL SCROLLER", True, "Black")
-        self.game_title_rect = self.game_title_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 250))
+        self.game_title_rect = self.game_title_surf.get_rect(center = (display.SCREEN_WIDTH / 2, 250))
 
         self.restart_game_surf = self.second_font.render("Press 'Space' to Play Again", True, "Black")
         self.restart_game_rect = self.start_game_surf.get_rect(
-            center = (display_obj.SCREEN_WIDTH / 2 - 25, display_obj.SCREEN_HEIGHT / 2))
+            center = (display.SCREEN_WIDTH / 2 - 25, display.SCREEN_HEIGHT / 2))
 
         self.quit_game_surf = self.second_font.render("Press 'Q' to Exit", True, "Black")
-        self.quit_game_rect = self.quit_game_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 340))
+        self.quit_game_rect = self.quit_game_surf.get_rect(center = (display.SCREEN_WIDTH / 2, 340))
 
         self.game_over_surf = self.main_font.render("GAME OVER", True, "Black")
-        self.game_over_rect = self.game_title_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2 + 80, 250))
+        self.game_over_rect = self.game_title_surf.get_rect(center = (display.SCREEN_WIDTH / 2 + 80, 250))
 
         self.pause_menu_surf = self.main_font.render("PAUSE", True, "Black")
-        self.pause_menu_rect = self.pause_menu_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 250))
+        self.pause_menu_rect = self.pause_menu_surf.get_rect(center = (display.SCREEN_WIDTH / 2, 250))
 
         self.resume_game_surf = self.second_font.render("Press 'Space' to Resume", True, "Black")
         self.resume_game_rect = self.resume_game_surf.get_rect(
-            center = (display_obj.SCREEN_WIDTH / 2, display_obj.SCREEN_HEIGHT / 2))
+            center = (display.SCREEN_WIDTH / 2, display.SCREEN_HEIGHT / 2))
         
         self.high_score_surf = self.second_font.render(f"HIGH SCORE: {self.current_high_score}", True, "Black")
         self.high_score_rect = self.high_score_surf.get_rect(topleft = (25, 25))
@@ -88,7 +87,7 @@ class Engine:
                     exit()
             elif self.game_playing:
                 if event.type == display.pygame.KEYDOWN:
-                    if event.key == display.pygame.K_SPACE and player_obj.player_rect.bottom == display_obj.background_surf.get_height():
+                    if event.key == display.pygame.K_SPACE and player_obj.player_rect.bottom == display.background_surf.get_height():
                         player_obj.player_gravity -= 15
                 if event.type == display.pygame.KEYDOWN and event.key == display.pygame.K_ESCAPE:
                     self.game_playing = False
@@ -104,8 +103,8 @@ class Engine:
                     exit()
             elif self.in_game_over_menu:
                 if event.type == display.pygame.KEYDOWN and event.key == display.pygame.K_SPACE:
-                    walking_enemy_obj.walking_enemy_rect.left = display_obj.SCREEN_WIDTH
-                    flying_enemy_obj.flying_enemy_rect.left = display_obj.SCREEN_WIDTH + 300
+                    walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH
+                    flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + 300
                     self.game_playing = True
                     self.score_reset = display.pygame.time.get_ticks() // 125
                     self.pause_duration = 0
@@ -117,7 +116,7 @@ class Engine:
     def update_score(self):
         current_score = (display.pygame.time.get_ticks() // 125) - self.score_reset - self.pause_duration
         score_surf = self.main_font.render(f"SCORE: {current_score}", True, "Black")
-        score_rect = score_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 50))
+        score_rect = score_surf.get_rect(center = (display.SCREEN_WIDTH / 2, 50))
         display.screen.blit(score_surf, score_rect)
         score.store_high_score(current_score)
         return current_score
@@ -151,8 +150,8 @@ class Engine:
 
     # Draw Functions
     def draw_background(self):
-        display.screen.blit(display_obj.background_surf, display_obj.background_rect)
-        display.screen.blit(display_obj.ground_surf, display_obj.ground_rect)
+        display.screen.blit(display.background_surf, display.background_rect)
+        display.screen.blit(display.ground_surf, display.ground_rect)
 
     def draw_start_menu(self):
         display.screen.blit(self.game_title_surf, self.game_title_rect)
@@ -190,17 +189,17 @@ class Engine:
 
             player_obj.player_gravity += 0.5
             player_obj.player_rect.y += player_obj.player_gravity
-            if player_obj.player_rect.bottom >= display_obj.background_surf.get_height():
-                player_obj.player_rect.bottom = display_obj.background_surf.get_height()
+            if player_obj.player_rect.bottom >= display.background_surf.get_height():
+                player_obj.player_rect.bottom = display.background_surf.get_height()
                 player_obj.player_gravity = 0
 
             walking_enemy_obj.walking_enemy_rect.x -= walking_enemy_obj.walking_enemy_speed
             if walking_enemy_obj.walking_enemy_rect.right < -20:
-                walking_enemy_obj.walking_enemy_rect.left = display_obj.SCREEN_WIDTH + randint(1, 75)
+                walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH + randint(1, 75)
 
             flying_enemy_obj.flying_enemy_rect.x -= flying_enemy_obj.flying_enemy_speed
             if flying_enemy_obj.flying_enemy_rect.right < - 50:
-                flying_enemy_obj.flying_enemy_rect.left = display_obj.SCREEN_WIDTH + randint(100, 150)
+                flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + randint(100, 150)
         
             self.draw_characters()
             self.update_score()
@@ -233,4 +232,4 @@ class Engine:
             self.draw_game_over_menu()
 
         display.pygame.display.update()
-        display_obj.clock.tick(60)
+        display.clock.tick(60)

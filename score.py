@@ -11,7 +11,7 @@ def get_high_score(hs_file = "highscore.json"):
         return 0
     
 def store_high_score(score, hs_file = "highscore.json"):
-    current_high_score = get_high_score(hs_file)
+    current_high_score = get_high_score()
 
     if score > current_high_score:
         with open(hs_file, 'w') as file:
