@@ -133,20 +133,20 @@ class Engine:
         interval_five = 500
 
         if score > interval_one:
-            walking_enemy_obj.walking_enemy_speed = 4
-            flying_enemy_obj.flying_enemy_speed = 4
-        elif score > interval_two:
             walking_enemy_obj.walking_enemy_speed = 5
             flying_enemy_obj.flying_enemy_speed = 5
-        elif score > interval_three:
+        elif score > interval_two:
             walking_enemy_obj.walking_enemy_speed = 6
             flying_enemy_obj.flying_enemy_speed = 6
-        elif score > interval_four:
+        elif score > interval_three:
             walking_enemy_obj.walking_enemy_speed = 7
             flying_enemy_obj.flying_enemy_speed = 7
-        elif score > interval_five:
+        elif score > interval_four:
             walking_enemy_obj.walking_enemy_speed = 8
             flying_enemy_obj.flying_enemy_speed = 8
+        elif score > interval_five:
+            walking_enemy_obj.walking_enemy_speed = 10
+            flying_enemy_obj.flying_enemy_speed = 10
 
     # Draw Functions
     def draw_background(self):
