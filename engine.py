@@ -113,18 +113,43 @@ class Engine:
                     display.pygame.quit()
                     exit()
 
-    # Functions to draw everything
+    # Update Functions
     def update_score(self):
         current_score = (display.pygame.time.get_ticks() // 125) - self.score_reset - self.pause_duration
         score_surf = self.main_font.render(f"SCORE: {current_score}", True, "Black")
         score_rect = score_surf.get_rect(center = (display_obj.SCREEN_WIDTH / 2, 50))
         display.screen.blit(score_surf, score_rect)
         score.store_high_score(current_score)
+        return current_score
     
     def update_high_score(self):
         new_high_score = score.get_high_score()
         self.high_score_surf = self.second_font.render(f"HIGH SCORE: {new_high_score}", True, "Black")
 
+    def increase_enemy_speed(self, score):
+        interval_one = 75
+        interval_two = 150
+        interval_three = 250
+        interval_four = 375
+        interval_five = 500
+
+        if score > interval_one:
+            walking_enemy_obj.walking_enemy_speed = 4
+            flying_enemy_obj.flying_enemy_speed = 4
+        elif score > interval_two:
+            walking_enemy_obj.walking_enemy_speed = 5
+            flying_enemy_obj.flying_enemy_speed = 5
+        elif score > interval_three:
+            walking_enemy_obj.walking_enemy_speed = 6
+            flying_enemy_obj.flying_enemy_speed = 6
+        elif score > interval_four:
+            walking_enemy_obj.walking_enemy_speed = 7
+            flying_enemy_obj.flying_enemy_speed = 7
+        elif score > interval_five:
+            walking_enemy_obj.walking_enemy_speed = 8
+            flying_enemy_obj.flying_enemy_speed = 8
+
+    # Draw Functions
     def draw_background(self):
         display.screen.blit(display_obj.background_surf, display_obj.background_rect)
         display.screen.blit(display_obj.ground_surf, display_obj.ground_rect)
@@ -179,6 +204,7 @@ class Engine:
         
             self.draw_characters()
             self.update_score()
+            self.increase_enemy_speed(self.update_score())
 
             '''
             Used for constant calculation of mask offset
