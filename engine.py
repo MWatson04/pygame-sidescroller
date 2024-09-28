@@ -5,12 +5,12 @@ import score
 from sys import exit
 from random import randint
 
-player_obj = player.Player()
-walking_enemy_obj = enemy.WalkingEnemy()
-flying_enemy_obj = enemy.FlyingEnemy()
-
 class Engine:
     def __init__(self):
+        self.player_obj = player.Player()
+        self.walking_enemy_obj = enemy.WalkingEnemy()
+        self.flying_enemy_obj = enemy.FlyingEnemy()
+
         self.score_reset = 0
         self.pause_start = 0
         self.pause_duration = 0
@@ -87,8 +87,8 @@ class Engine:
                     exit()
             elif self.game_playing:
                 if event.type == display.pygame.KEYDOWN:
-                    if event.key == display.pygame.K_SPACE and player_obj.player_rect.bottom == display.background_surf.get_height():
-                        player_obj.player_gravity -= 15
+                    if event.key == display.pygame.K_SPACE and self.player_obj.player_rect.bottom == display.background_surf.get_height():
+                        self.player_obj.player_gravity -= 15
                 if event.type == display.pygame.KEYDOWN and event.key == display.pygame.K_ESCAPE:
                     self.game_playing = False
                     self.in_pause_menu = True
@@ -103,8 +103,8 @@ class Engine:
                     exit()
             elif self.in_game_over_menu:
                 if event.type == display.pygame.KEYDOWN and event.key == display.pygame.K_SPACE:
-                    walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH
-                    flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + 300
+                    self.walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH
+                    self.flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + 300
                     self.game_playing = True
                     self.score_reset = display.pygame.time.get_ticks() // 125
                     self.pause_duration = 0
@@ -138,46 +138,46 @@ class Engine:
         interval_ten = 2000
 
         if score > interval_one:
-            walking_enemy_obj.walking_enemy_speed = 5
-            flying_enemy_obj.flying_enemy_speed = 5
+            self.walking_enemy_obj.walking_enemy_speed = 5
+            self.flying_enemy_obj.flying_enemy_speed = 5
         if score > interval_two:
-            walking_enemy_obj.walking_enemy_speed = 6
-            flying_enemy_obj.flying_enemy_speed = 6
+            self.walking_enemy_obj.walking_enemy_speed = 6
+            self.flying_enemy_obj.flying_enemy_speed = 6
         if score > interval_three:
-            walking_enemy_obj.walking_enemy_speed = 7
-            flying_enemy_obj.flying_enemy_speed = 7
+            self.walking_enemy_obj.walking_enemy_speed = 7
+            self.flying_enemy_obj.flying_enemy_speed = 7
         if score > interval_four:
-            walking_enemy_obj.walking_enemy_speed = 8
-            flying_enemy_obj.flying_enemy_speed = 8
+            self.walking_enemy_obj.walking_enemy_speed = 8
+            self.flying_enemy_obj.flying_enemy_speed = 8
         if score > interval_five:
-            walking_enemy_obj.walking_enemy_speed = 9
-            flying_enemy_obj.flying_enemy_speed = 9
+            self.walking_enemy_obj.walking_enemy_speed = 9
+            self.flying_enemy_obj.flying_enemy_speed = 9
         if score > interval_six:
-            walking_enemy_obj.walking_enemy_speed = 10
-            flying_enemy_obj.flying_enemy_speed = 10
+            self.walking_enemy_obj.walking_enemy_speed = 10
+            self.flying_enemy_obj.flying_enemy_speed = 10
         if score > interval_seven:
-            walking_enemy_obj.walking_enemy_speed = 11
-            flying_enemy_obj.flying_enemy_speed = 11
+            self.walking_enemy_obj.walking_enemy_speed = 11
+            self.flying_enemy_obj.flying_enemy_speed = 11
         if score > interval_eight:
-            walking_enemy_obj.walking_enemy_speed = 12
-            flying_enemy_obj.flying_enemy_speed = 12
+            self.walking_enemy_obj.walking_enemy_speed = 12
+            self.flying_enemy_obj.flying_enemy_speed = 12
         if score > interval_nine:
-            walking_enemy_obj.walking_enemy_speed = 13
-            flying_enemy_obj.flying_enemy_speed = 13
+            self.walking_enemy_obj.walking_enemy_speed = 13
+            self.flying_enemy_obj.flying_enemy_speed = 13
         if score > interval_ten:
-            walking_enemy_obj.walking_enemy_speed = 15
-            flying_enemy_obj.flying_enemy_speed = 15
+            self.walking_enemy_obj.walking_enemy_speed = 15
+            self.flying_enemy_obj.flying_enemy_speed = 15
 
     # This is needed to avoid enemies repositioning on top of each other which is impossible to jump through
     def realign_enemies(self):
-        offset = flying_enemy_obj.flying_enemy_rect.x - walking_enemy_obj.walking_enemy_rect.x
+        offset = self.flying_enemy_obj.flying_enemy_rect.x - self.walking_enemy_obj.walking_enemy_rect.x
 
-        if flying_enemy_obj.flying_enemy_rect.x > display.SCREEN_WIDTH:
+        if self.flying_enemy_obj.flying_enemy_rect.x > display.SCREEN_WIDTH:
             if offset <= 100:
-                flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + 200
-        elif walking_enemy_obj.walking_enemy_rect.x > display.SCREEN_WIDTH:
+                self.flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + 200
+        elif self.walking_enemy_obj.walking_enemy_rect.x > display.SCREEN_WIDTH:
             if offset >= -100 and offset < 0:
-                walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH + 200
+                self.walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH + 200
 
     # Draw Functions
     def draw_background(self):
@@ -204,9 +204,9 @@ class Engine:
         display.screen.blit(self.high_score_surf, self.high_score_rect)
 
     def draw_characters(self):
-        display.screen.blit(player_obj.player_surf, player_obj.player_rect)
-        display.screen.blit(walking_enemy_obj.walking_enemy_surf, walking_enemy_obj.walking_enemy_rect)
-        display.screen.blit(flying_enemy_obj.flying_enemy_surf, flying_enemy_obj.flying_enemy_rect)
+        display.screen.blit(self.player_obj.player_surf, self.player_obj.player_rect)
+        display.screen.blit(self.walking_enemy_obj.walking_enemy_surf, self.walking_enemy_obj.walking_enemy_rect)
+        display.screen.blit(self.flying_enemy_obj.flying_enemy_surf, self.flying_enemy_obj.flying_enemy_rect)
 
     def run_game(self):
         self.event_catcher()
@@ -218,19 +218,19 @@ class Engine:
         elif self.game_playing:
             self.draw_background()
 
-            player_obj.player_gravity += 0.5
-            player_obj.player_rect.y += player_obj.player_gravity
-            if player_obj.player_rect.bottom >= display.background_surf.get_height():
-                player_obj.player_rect.bottom = display.background_surf.get_height()
-                player_obj.player_gravity = 0
+            self.player_obj.player_gravity += 0.5
+            self.player_obj.player_rect.y += self.player_obj.player_gravity
+            if self.player_obj.player_rect.bottom >= display.background_surf.get_height():
+                self.player_obj.player_rect.bottom = display.background_surf.get_height()
+                self.player_obj.player_gravity = 0
 
-            walking_enemy_obj.walking_enemy_rect.x -= walking_enemy_obj.walking_enemy_speed
-            if walking_enemy_obj.walking_enemy_rect.right < -20:
-                walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH + randint(1, 75)
+            self.walking_enemy_obj.walking_enemy_rect.x -= self.walking_enemy_obj.walking_enemy_speed
+            if self.walking_enemy_obj.walking_enemy_rect.right < -20:
+                self.walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH + randint(1, 75)
 
-            flying_enemy_obj.flying_enemy_rect.x -= flying_enemy_obj.flying_enemy_speed
-            if flying_enemy_obj.flying_enemy_rect.right < - 20:
-                flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + randint(100, 150)
+            self.flying_enemy_obj.flying_enemy_rect.x -= self.flying_enemy_obj.flying_enemy_speed
+            if self.flying_enemy_obj.flying_enemy_rect.right < - 20:
+                self.flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + randint(100, 150)
         
             self.draw_characters()
             self.update_score()
@@ -243,16 +243,16 @@ class Engine:
             Collision happens when offset.x is less than the combined width of the two images
             or when offset.y is less than the combined height of the two images
             '''
-            plyr_walkenemy_offset = (walking_enemy_obj.walking_enemy_rect.x - player_obj.player_rect.x, 
-                walking_enemy_obj.walking_enemy_rect.y - player_obj.player_rect.y)
-            plyr_flyenemy_offset = (flying_enemy_obj.flying_enemy_rect.x - player_obj.player_rect.x, 
-                flying_enemy_obj.flying_enemy_rect.y - player_obj.player_rect.y)
+            plyr_walkenemy_offset = (self.walking_enemy_obj.walking_enemy_rect.x - self.player_obj.player_rect.x, 
+                self.walking_enemy_obj.walking_enemy_rect.y - self.player_obj.player_rect.y)
+            plyr_flyenemy_offset = (self.flying_enemy_obj.flying_enemy_rect.x - self.player_obj.player_rect.x, 
+                self.flying_enemy_obj.flying_enemy_rect.y - self.player_obj.player_rect.y)
             
-            if player_obj.player_mask.overlap(walking_enemy_obj.walking_enemy_mask, plyr_walkenemy_offset):
+            if self.player_obj.player_mask.overlap(self.walking_enemy_obj.walking_enemy_mask, plyr_walkenemy_offset):
                 self.update_high_score()
                 self.game_playing = False
                 self.in_game_over_menu = True
-            if player_obj.player_mask.overlap(flying_enemy_obj.flying_enemy_mask, plyr_flyenemy_offset):
+            if self.player_obj.player_mask.overlap(self.flying_enemy_obj.flying_enemy_mask, plyr_flyenemy_offset):
                 self.update_high_score()
                 self.game_playing = False
                 self.in_game_over_menu = True
