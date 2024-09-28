@@ -23,13 +23,13 @@ class Engine:
         # Music
         # self.start_menu_music = display.pygame.mixer.Sound("sounds/arcade-party-173553.mp3")
         # self.start_menu_music.set_volume(0.5)
-        self.game_playing_music = display.pygame.mixer.Sound("sounds/music-for-arcade-style-game-146875.mp3")
+        self.game_playing_music = display.pygame.mixer.Sound("../sounds/music-for-arcade-style-game-146875.mp3")
         self.game_playing_music.set_volume(0.5)
         self.game_playing_music.play(loops = -1)
 
         # All Fonts/Text Surfs/Rects------------------------------------------------------------------------------------
-        self.main_font = display.pygame.font.Font("fonts/Modenine-2OPd.ttf", 50)
-        self.second_font = display.pygame.font.Font("fonts/Modenine-2OPd.ttf", 23)
+        self.main_font = display.pygame.font.Font("../fonts/Modenine-2OPd.ttf", 50)
+        self.second_font = display.pygame.font.Font("../fonts/Modenine-2OPd.ttf", 23)
 
         self.start_game_surf = self.second_font.render("Press 'Space' to Start", True, "Black")
         self.start_game_rect = self.start_game_surf.get_rect(
