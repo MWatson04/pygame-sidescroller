@@ -131,22 +131,53 @@ class Engine:
         interval_three = 250
         interval_four = 375
         interval_five = 500
+        interval_six = 700
+        interval_seven = 900
+        interval_eight = 1100
+        interval_nine = 1400
+        interval_ten = 2000
 
         if score > interval_one:
             walking_enemy_obj.walking_enemy_speed = 5
             flying_enemy_obj.flying_enemy_speed = 5
-        elif score > interval_two:
+        if score > interval_two:
             walking_enemy_obj.walking_enemy_speed = 6
             flying_enemy_obj.flying_enemy_speed = 6
-        elif score > interval_three:
+        if score > interval_three:
             walking_enemy_obj.walking_enemy_speed = 7
             flying_enemy_obj.flying_enemy_speed = 7
-        elif score > interval_four:
+        if score > interval_four:
             walking_enemy_obj.walking_enemy_speed = 8
             flying_enemy_obj.flying_enemy_speed = 8
-        elif score > interval_five:
+        if score > interval_five:
+            walking_enemy_obj.walking_enemy_speed = 9
+            flying_enemy_obj.flying_enemy_speed = 9
+        if score > interval_six:
             walking_enemy_obj.walking_enemy_speed = 10
             flying_enemy_obj.flying_enemy_speed = 10
+        if score > interval_seven:
+            walking_enemy_obj.walking_enemy_speed = 11
+            flying_enemy_obj.flying_enemy_speed = 11
+        if score > interval_eight:
+            walking_enemy_obj.walking_enemy_speed = 12
+            flying_enemy_obj.flying_enemy_speed = 12
+        if score > interval_nine:
+            walking_enemy_obj.walking_enemy_speed = 13
+            flying_enemy_obj.flying_enemy_speed = 13
+        if score > interval_ten:
+            walking_enemy_obj.walking_enemy_speed = 15
+            flying_enemy_obj.flying_enemy_speed = 15
+
+    # This is needed to avoid enemies repositioning on top of each other which is impossible to jump through
+    def realign_enemies(self):
+        offset = flying_enemy_obj.flying_enemy_rect.x - walking_enemy_obj.walking_enemy_rect.x
+
+        if flying_enemy_obj.flying_enemy_rect.x > display.SCREEN_WIDTH:
+            if offset <= 100:
+                flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + 200
+        elif walking_enemy_obj.walking_enemy_rect.x > display.SCREEN_WIDTH:
+            if offset >= -100 and offset < 0:
+                walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH + 200
 
     # Draw Functions
     def draw_background(self):
@@ -198,12 +229,13 @@ class Engine:
                 walking_enemy_obj.walking_enemy_rect.left = display.SCREEN_WIDTH + randint(1, 75)
 
             flying_enemy_obj.flying_enemy_rect.x -= flying_enemy_obj.flying_enemy_speed
-            if flying_enemy_obj.flying_enemy_rect.right < - 50:
+            if flying_enemy_obj.flying_enemy_rect.right < - 20:
                 flying_enemy_obj.flying_enemy_rect.left = display.SCREEN_WIDTH + randint(100, 150)
         
             self.draw_characters()
             self.update_score()
             self.increase_enemy_speed(self.update_score())
+            self.realign_enemies()
 
             '''
             Used for constant calculation of mask offset
